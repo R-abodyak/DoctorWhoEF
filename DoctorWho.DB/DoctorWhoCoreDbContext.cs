@@ -1,6 +1,8 @@
 ﻿using System;
 using DoctorWho. DB. Models;
 using Microsoft. EntityFrameworkCore;
+using Microsoft. EntityFrameworkCore. SqlServer;
+
 namespace DoctorWho. DB
     {
     public class DoctorWhoCoreDbContext :DbContext
@@ -10,6 +12,10 @@ namespace DoctorWho. DB
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Companion> Companions { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+            {
+            optionsBuilder. UseSqlServer("Data Source = (localdb)\\MSSQLLocalDB; Initial Catalog = DoctorWhoCore");
+            }
 
         protected override void OnModelCreating(ModelBuilder builder)
             {
