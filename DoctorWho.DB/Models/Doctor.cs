@@ -10,10 +10,10 @@ namespace DoctorWho. DB. Models
         public int DoctorNumber { get; set; }
 
         public string DoctorName { get; set; }
-        DateTime BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
 
-        DateTime FirstEpisodeDate { get; set; }
-        DateTime LastEpisodeDate { get; set; }
+        public DateTime FirstEpisodeDate { get; set; }
+        public DateTime LastEpisodeDate { get; set; }
 
         //
         public ICollection<Episode> Episodes { get; set; }
