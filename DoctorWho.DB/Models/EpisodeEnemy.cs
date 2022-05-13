@@ -8,7 +8,7 @@ namespace DoctorWho. DB. Models
         {
         public int EpisodeEnemyId { get; set; }
         public int EpisodeId { get; set; }
-        public int CompanionID { get; set; }
+        public int EnemyID { get; set; }
         public Episode Episode { get; set; }
         public Enemy Enemy { get; set; }
 

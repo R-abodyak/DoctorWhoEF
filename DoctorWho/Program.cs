@@ -1,12 +1,14 @@
-﻿using System;
+﻿using DoctorWho. DB;
+using System;
 
 namespace DoctorWho
-{
-    internal class Program
     {
-        static void Main(string[] args)
+    internal class Program
         {
-            Console.WriteLine("Hello World!");
+        static void Main(string[] args)
+            {
+
+
+            }
         }
     }
-}

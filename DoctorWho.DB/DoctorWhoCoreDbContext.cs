@@ -1,7 +1,9 @@
 ﻿using System;
+using System. Collections. Generic;
 using DoctorWho. DB. Models;
 using Microsoft. EntityFrameworkCore;
 using Microsoft. EntityFrameworkCore. SqlServer;
+using System. Linq;
 
 namespace DoctorWho. DB
     {
@@ -35,10 +37,13 @@ namespace DoctorWho. DB
                 . WithMany(e => e. EpisodeCompanion);
             builder. Entity<EpisodeEnemy>()
                 . HasOne(e => e. Episode)
-                . WithMany(e => e. EpisodeEnemies);
+                . WithMany(e => e. EpisodeEnemies)
+                . HasForeignKey(e => e. EpisodeId);
             builder. Entity<EpisodeEnemy>()
                 . HasOne(e => e. Enemy)
-                . WithMany(e => e. EpisodeEnemies);
+                . WithMany(e => e. EpisodeEnemies)
+                . HasForeignKey(e => e. EnemyID);
+
 
             //constrains
             builder. Entity<Episode>(). HasAlternateKey(e => e. SeriesNumber);//unique --this was added as constrain in mig file
@@ -92,18 +97,23 @@ namespace DoctorWho. DB
                       }
 
                 );
+            Author[] Authors = new Author[5];
+            Authors[0] = new Author { AuthorId = 1 , AuthorName = "Mohamed" };
+            Authors[1] = new Author { AuthorId = 2 , AuthorName = "Ahmed" };
+            Authors[2] = new Author { AuthorId = 3 , AuthorName = "Aseel" };
+            Authors[3] = new Author { AuthorId = 4 , AuthorName = "Omar" };
+            Authors[4] = new Author { AuthorId = 5 , AuthorName = "Marwa" };
             builder. Entity<Author>(). HasData(
-                new Author { AuthorId = 1 , AuthorName = "Mohamed" } ,
-                new Author { AuthorId = 2 , AuthorName = "Ahmed" } ,
-                new Author { AuthorId = 3 , AuthorName = "Aseel" } ,
-                new Author { AuthorId = 4 , AuthorName = "Omar" } ,
-                new Author { AuthorId = 5 , AuthorName = "Marwa" }
-
+                Authors[0] ,
+                Authors[1] ,
+                Authors[2] ,
+                Authors[3] ,
+                Authors[4]
 
                 );
             builder. Entity<Episode>(). HasData
                (
-                new Episode
+                new
                     {
                     EpisodeId = 1 ,
                     EpisodeNumber = 1 ,
@@ -112,6 +122,11 @@ namespace DoctorWho. DB
                     Tittle = "tittle1" ,
                     EpisodeDate = new DateTime(2018 , 7 , 24) ,
                     DoctorId = 1 ,
+                    //  Author = Authors[0] // , doesnt work  :The seed entity for entity type 'Episode'
+                    // with the key value 'EpisodeId:1' cannot be added because it has the navigation 'Author' set.
+                    // To seed relationships you need to add the related entity seed to 'Author' and specify the foreign key values {'AuthorId'}.
+
+
 
                     } ,
                 new Episode
@@ -124,6 +139,8 @@ namespace DoctorWho. DB
                     Tittle = "tittle2" ,
                     EpisodeDate = new DateTime(2022 , 7 , 24) ,
                     DoctorId = 1 ,
+                    // Author = Authors[1]
+
 
 
                     } ,
@@ -138,6 +155,7 @@ namespace DoctorWho. DB
                      EpisodeDate = new DateTime(2023 , 7 , 24) ,
                      Notes = "notes3" ,
                      DoctorId = 1 ,
+                     //Author = Authors[0]
 
                      } ,
                  new Episode
@@ -151,6 +169,8 @@ namespace DoctorWho. DB
                      EpisodeDate = new DateTime(2023 , 7 , 24) ,
                      Notes = "notes4" ,
                      DoctorId = 2 ,
+                     //Author = Authors[0]
+
 
                      } ,
                  new Episode
@@ -164,6 +184,8 @@ namespace DoctorWho. DB
                      EpisodeDate = new DateTime(2023 , 7 , 24) ,
                      Notes = "notes5" ,
                      DoctorId = 3 ,
+                     //Author = Authors[4]
+
 
                      }
                      );
