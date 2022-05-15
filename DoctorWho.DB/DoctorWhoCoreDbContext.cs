@@ -4,6 +4,7 @@ using DoctorWho. DB. Models;
 using Microsoft. EntityFrameworkCore;
 using Microsoft. EntityFrameworkCore. SqlServer;
 using System. Linq;
+using Microsoft. Extensions. Logging;
 
 namespace DoctorWho. DB
     {
@@ -13,11 +14,27 @@ namespace DoctorWho. DB
         public DbSet<Author> Authors { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Companion> Companions { get; set; }
+        public DbSet<KeylessEntity> KeylessEntity { get; set; }
+        public DbSet<viewEpisodes> ViewEpisodes { get; set; }
 
+        [DbFunction(Schema = "dbo" , Name = "fnCompanion")]
+        public static string fnCompanion(int id)
+            {
+            throw new NotImplementedException();
+            }
+        [DbFunction]
+        public static string fnEnemies(int id)
+            {
+            throw new NotImplementedException();
+            }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {
             optionsBuilder. EnableSensitiveDataLogging(true);
             optionsBuilder. UseSqlServer("Data Source = (localdb)\\MSSQLLocalDB; Initial Catalog = DoctorWhoCore");
+            //optionsBuilder. UseLoggerFactory(_myLoggerFactory);
+
+
+
             }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -43,12 +60,26 @@ namespace DoctorWho. DB
                 . HasOne(e => e. Enemy)
                 . WithMany(e => e. EpisodeEnemies)
                 . HasForeignKey(e => e. EnemyID);
+            builder. Entity<KeylessEntity>(). HasNoKey();
+            //view Mapping 
 
+            builder. Entity<viewEpisodes>(). HasNoKey(). ToView("viewEpisodes");
 
+            //func MAPPING
+
+            builder. HasDbFunction(typeof(DoctorWhoCoreDbContext)
+                . GetMethod(nameof(fnCompanion) ,
+             new[] { typeof(int) })). HasName("fnCompanion"). HasSchema("dbo");
+
+            builder. HasDbFunction(typeof(DoctorWhoCoreDbContext)
+               . GetMethod(nameof(fnEnemies) ,
+            new[] { typeof(int) })). HasName("fnEnemies"). HasSchema("dbo");
             //constrains
             builder. Entity<Episode>(). HasAlternateKey(e => e. SeriesNumber);//unique --this was added as constrain in mig file
             builder. Entity<Episode>(). HasIndex(e => e. EpisodeNumber). IsUnique();//unique
             builder. Entity<Doctor>(). HasAlternateKey(e => e. DoctorNumber);//unique
+                                                                             //sCALER VALUE FUNCTION MAPPING 
+
             //Dataseeding 
             builder. Entity<Doctor>(). HasData(
                 new Doctor

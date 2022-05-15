@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DoctorWho.DB.Migrations
 {
     [DbContext(typeof(DoctorWhoCoreDbContext))]
-    [Migration("20220513065820_c")]
-    partial class c
+    [Migration("20220515083502_func-mapping")]
+    partial class funcmapping
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -346,10 +346,10 @@ namespace DoctorWho.DB.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CompanionID")
+                    b.Property<int>("CompanionID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("EpisodeId")
+                    b.Property<int>("EpisodeId")
                         .HasColumnType("int");
 
                     b.HasKey("EpisodeCompanionId");
@@ -383,6 +383,11 @@ namespace DoctorWho.DB.Migrations
                     b.ToTable("EpisodeEnemy");
                 });
 
+            modelBuilder.Entity("DoctorWho.DB.Models.KeylessEntity", b =>
+                {
+                    b.ToTable("KeylessEntity");
+                });
+
             modelBuilder.Entity("DoctorWho.DB.Models.Episode", b =>
                 {
                     b.HasOne("DoctorWho.DB.Models.Author", "Author")
@@ -400,11 +405,15 @@ namespace DoctorWho.DB.Migrations
                 {
                     b.HasOne("DoctorWho.DB.Models.Companion", "Companion")
                         .WithMany("EpisodeCompanion")
-                        .HasForeignKey("CompanionID");
+                        .HasForeignKey("CompanionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DoctorWho.DB.Models.Episode", "Episode")
                         .WithMany("EpisodeCompanion")
-                        .HasForeignKey("EpisodeId");
+                        .HasForeignKey("EpisodeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DoctorWho.DB.Models.EpisodeEnemy", b =>
