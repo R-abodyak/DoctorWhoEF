@@ -1,5 +1,6 @@
 ﻿using DoctorWho.DB;
 using DoctorWho.DB.Models;
+using DoctorWho.DB.Repositories;
 using DoctorWho.DB.Resurces;
 
 using Microsoft.EntityFrameworkCore;
@@ -60,10 +61,12 @@ namespace DoctorWho
                 FirstEpisodeDate = DateTime.Now ,
                 LastEpisodeDate = DateTime.Now
                 };
-            AddDoctor(d1);
+            DoctorRepository.AddDoctor(d1);
             int id = 1;
-            UpdateDoctor(id ,d2);
-            DeleteDoctor(2);
+            DoctorRepository.UpdateDoctor(id ,d2);
+            DoctorRepository.DeleteDoctor(2);
+
+
             num = rnd.Next();
             Episode e = new Episode()
                 {
@@ -79,12 +82,12 @@ namespace DoctorWho
 
 
                 };
-            AddeEpisode(e);
-            UpdateEpisode(1003 ,d1);
-            //    DeleteEpisode(e.EpisodeId);
-            AddEnemy(enemy);
+            EpisodeRepository.AddeEpisode(e);
+            EpisodeRepository.UpdateEpisode(1003 ,d1);
+            //EpisodeRepository.DeleteEpisode(e.EpisodeId);
+            EnemyRepository.AddEnemy(enemy);
             AddEnemyToEpisode(enemy ,e);
-            //DeleteAuthor(2);
+            //AuthorRepository.DeleteAuthor(2);
 
             }
 
@@ -114,61 +117,10 @@ namespace DoctorWho
             }
 
 
-        public static void AddDoctor(Doctor doctor)
-            {
 
-            context.Doctors.Add(doctor);
-            context.SaveChanges();
-            }
 
-        public static void UpdateDoctor(int id ,DoctorDto d)
-            {
 
-            var x = context.Doctors.Find(id);
-            if( x == null ) throw new Exception("id is not exist");
-            x.DoctorName = d.DoctorName;
 
-            x.BirthDate = DateTime.Now;
-            x.FirstEpisodeDate = new DateTime(1900 ,04 ,16);
-            x.LastEpisodeDate = new DateTime(2030 ,11 ,11);
-
-            context.SaveChanges();
-            }
-        public static void DeleteDoctor(int id)
-            {
-            //DELETE DOCTOR ALSO DELETE RELATED EPISODE
-            var x = context.Doctors.Find(id);
-            if( x == null ) return; //throw new Exception("id is not exist");
-            context.Doctors.Remove(x);
-            context.SaveChanges();
-
-            }
-        public static void AddeEpisode(Episode episode)
-            {
-
-            context.Episodes.Add(episode);
-            context.SaveChanges();
-            }
-        public static void UpdateEpisode(int id ,Doctor doctor)
-            {
-            var x = context.Episodes.Find(id);
-            if( x == null ) return;
-            x.Doctor = doctor;
-            context.SaveChanges();
-            }
-        public static void DeleteEpisode(int id)
-            {
-            var x = context.Episodes.Find(id);
-            if( x == null ) return;
-            context.Episodes.Remove(x);
-            context.SaveChanges();
-            }
-
-        public static void AddEnemy(Enemy enemy)
-            {
-            var x = context.Add(enemy);
-            context.SaveChanges();
-            }
 
         public static void AddEnemyToEpisode(Enemy enemy ,Episode episode)
             {
@@ -191,22 +143,6 @@ namespace DoctorWho
             var companion = context.Companions.Find(id);
             return companion;
 
-            }
-        public static void DeleteAuthor(int id)
-            {
-
-
-            //var x = context.Authors.Find(id);
-            var x = context.Authors.Where(d => d.AuthorId == 1).First();
-            var episodes = x.Episodes.ToList();
-            foreach( var episode in episodes )
-                {
-                context.Episodes.Remove(episode);
-
-                }
-            if( x == null ) return;
-            context.Authors.Remove(x);
-            context.SaveChanges();
             }
 
 
