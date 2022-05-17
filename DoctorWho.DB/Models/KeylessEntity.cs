@@ -1,11 +1,11 @@
 ﻿using System;
-using System. Collections. Generic;
-using System. Text;
+using System.Collections.Generic;
+using System.Text;
 
-namespace DoctorWho. DB. Models
+namespace DoctorWho.DB.Models
     {
     public class KeylessEntity
         {
-        string Names { get; set; }
+        public string Value { get; set; }
         }
     }
