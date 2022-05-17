@@ -25,28 +25,21 @@ namespace DoctorWho
 
 
 
-          
+
             //view 
-            var v = context.ViewEpisodes.ToList();
+            var v = context.ViewEpisodes.First();
             //foreach( var episode in v )
             //    {
             //    Console. WriteLine(episode);
             //    }
 
-            //Console. WriteLine(userEnemies);
-
+            //stored procedure 
             //var X = context. Companions. FromSqlRaw(" exec dbo.spSummariseEpisodes"). ToList();
             //foreach( var x in X )
             //    {
             //    Console. WriteLine(x. CompanionName);
             //    }
 
-
-
-
-            // var x = context. Companions. FromSqlRaw<string>("select [dbo].fnCompanion(1)"). firstOrDefult();
-            // context. Companions. FromSqlRaw("select [dbo].fnCompanion(1)");
-            // Console. WriteLine("x" + x);
 
             //ExecFunc();
             // LoadData();
@@ -229,11 +222,11 @@ namespace DoctorWho
 
             //2)HOW TO GET RESULT ?
             var x = context.Set<KeylessEntity>().FromSqlRaw("select [dbo]. fnCompanion(3) as Value").AsEnumerable().First();
-            Console.WriteLine("x=" + x.Value);  
+            Console.WriteLine("x=" + x.Value);
             var userEnemies = context.Episodes
               .Select(s => context.fnCompanion(s.EpisodeId)).ToList();
             //return x;
-          return string.Empty;
+            return string.Empty;
             }
 
         }
